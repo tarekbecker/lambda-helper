@@ -1,6 +1,6 @@
 const Winston = require('winston')
 
-exports.logger = new Winston.Logger()
+const logger = new Winston.Logger()
 
 function sendResponse (cb, body, statusCode = 200, headers = {}) {
   exports.logger.info(`Sending response, code: ${statusCode}`)
@@ -28,5 +28,8 @@ function extractTenant(e) {
 module.exports = {
   sendResponse,
   handleError,
-  extractTenant
+  extractTenant,
+  logger
 }
+
+exports = module.exports
