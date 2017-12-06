@@ -25,7 +25,7 @@ function extractTenant(e) {
       return e.requestContext.authorizer.claims.tenant;
 }
 
-exports = {
+module.exports = {
   sendResponse,
   handleError,
   extractTenant
