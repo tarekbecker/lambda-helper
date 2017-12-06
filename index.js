@@ -21,7 +21,12 @@ function handleError (cb) {
   }
 }
 
+function extractTenant(e) {
+      return e.requestContext.authorizer.claims.tenant;
+}
+
 exports = {
   sendResponse,
-  handleError
+  handleError,
+  extractTenant
 }
