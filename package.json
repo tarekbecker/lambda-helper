@@ -1,0 +1,12 @@
+{
+  "name": "lambda-helper",
+  "version": "0.0.1",
+  "main": "index.js",
+  "repository": "git@github.wdf.sap.corp:D059162/lambda-helper.git",
+  "author": "Tarek Becker <tarek.becker@sap.com>",
+  "license": "MIT",
+  "private": true,
+  "dependencies": {
+    "winston": "^2.4.0"
+  }
+}
