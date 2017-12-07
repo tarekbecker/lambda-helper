@@ -1,6 +1,9 @@
-const Winston = require('winston')
-
-const logger = new Winston.Logger()
+const logger = {
+  debug: () => {},
+  info: () => {},
+  warn: () => {},
+  error: () => {}
+}
 
 function sendResponse (cb, body, statusCode = 200, headers = {}) {
   exports.logger.info(`Sending response, code: ${statusCode}`)

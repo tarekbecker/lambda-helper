@@ -7,6 +7,5 @@
   "license": "MIT",
   "private": true,
   "dependencies": {
-    "winston": "^2.4.0"
   }
 }
