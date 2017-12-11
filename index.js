@@ -1,3 +1,9 @@
+const Promise = require('bluebird')
+const AWS = require('aws-sdk')
+
+AWS.config.setPromisesDependency(Promise)
+const s3 = new AWS.S3({ apiVersion: '2006-03-01' })
+
 const logger = {
   debug: () => {},
   info: () => {},
@@ -24,15 +30,46 @@ function handleError (cb) {
   }
 }
 
-function extractTenant(e) {
-      return e.requestContext.authorizer.claims.tenant;
+function extractTenant (e) {
+  return e.requestContext.authorizer.claims.tenant
+}
+
+function tenantFactory () {
+  const { env: { s3bucket } } = process
+  // time tenant data was loaded
+  let tenantLoadTime = 0
+  // promise containt tenant data
+  let tenantPromise
+
+  // this function returns tenant data promise
+  // refreshes the data if older than a minute
+  return function tenantInfo () {
+    if (new Date().getTime() - tenantLoadTime > 1000 * 60) {
+      exports.logger.info('Tenant info outdated, reloading')
+      tenantPromise = s3.getObject({
+        Bucket: s3bucket,
+        Key: 'tenants.json'
+      }).promise().then((data) => {
+        const config = JSON.parse(data.Body.toString())
+        exports.logger.info('Tenant config: %j', config)
+
+        const tenantMap = {}
+        config.forEach((t) => { tenantMap[t.id] = t })
+
+        return tenantMap
+      })
+      tenantLoadTime = new Date().getTime()
+    }
+    return tenantPromise
+  }
 }
 
 module.exports = {
   sendResponse,
   handleError,
   extractTenant,
-  logger
+  logger,
+  tenantInfo: tenantFactory()
 }
 
 exports = module.exports
