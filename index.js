@@ -31,7 +31,7 @@ function handleError (cb) {
 }
 
 function extractTenant (e) {
-  return e.requestContext.authorizer.claims.tenant
+  return e.requestContext.authorizer.claims.tenant.id
 }
 
 function tenantFactory () {
